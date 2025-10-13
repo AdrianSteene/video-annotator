@@ -29,13 +29,9 @@ npm install
 npm run dev
 ```
 
-⸻
-
 # Course Information
 
 This project is part of the course EDAF90.
-
-⸻
 
 Group Members
 • Oliver Levay
