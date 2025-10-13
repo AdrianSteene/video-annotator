@@ -17,7 +17,7 @@ function VideoAnnotatorContent() {
           <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
             <ArrowLeft className="w-4 h-4" />
           </Button>
-          <h1 className="text-xl font-bold">YouTube Annotator</h1>
+          <h1 className="text-xl font-bold">Video Annotator</h1>
         </div>
       </div>
 

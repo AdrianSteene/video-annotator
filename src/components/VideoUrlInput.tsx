@@ -20,8 +20,7 @@ export function VideoUrlInput() {
       <div className="space-y-2">
         <h2 className="text-2xl font-semibold">Paste a Video URL</h2>
         <p className="text-muted-foreground">
-          Enter a YouTube, Vimeo, or other supported video URL to start
-          annotating
+          Enter a Video, Vimeo, or other supported video URL to start annotating
         </p>
       </div>
       <div className="flex gap-2">
