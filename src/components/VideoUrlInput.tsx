@@ -3,14 +3,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useVideo } from "@/contexts/VideoContext";
 import { SavedVideosList } from "@/components/SavedVideosList";
+import { Alert, AlertDescription } from "./ui/alert";
+import { AlertCircleIcon } from "lucide-react";
 
 export function VideoUrlInput() {
   const [videoUrl, setVideoUrl] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const { setLoadedUrl } = useVideo();
 
   const handleLoad = () => {
-    if (!videoUrl.trim()) {
-      alert("Please enter a video URL");
+    try {
+      new URL(videoUrl);
+    } catch {
+      setError("Please enter a video URL");
       return;
     }
     setLoadedUrl(videoUrl);
@@ -30,11 +35,19 @@ export function VideoUrlInput() {
           value={videoUrl}
           onChange={(e) => setVideoUrl(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleLoad()}
-          className="flex-1"
+          className={`flex-1 ${
+            error && "border-red-500 focus-visible:ring-red-500"
+          }`}
         />
         <Button onClick={handleLoad}>Load Video</Button>
       </div>
       <SavedVideosList onSelectVideo={setLoadedUrl} />
+      {error && (
+        <Alert variant="destructive" className="content-center">
+          <AlertCircleIcon />
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
     </div>
   );
 }
