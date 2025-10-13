@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useVideo } from "@/contexts/VideoContext";
+import { SavedVideosList } from "@/components/SavedVideosList";
 
 export function VideoUrlInput() {
   const [videoUrl, setVideoUrl] = useState("");
@@ -16,7 +17,7 @@ export function VideoUrlInput() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-4">
+    <div className="max-w-6xl mx-auto space-y-4">
       <div className="space-y-2">
         <h2 className="text-2xl font-semibold">Paste a Video URL</h2>
         <p className="text-muted-foreground">
@@ -33,6 +34,7 @@ export function VideoUrlInput() {
         />
         <Button onClick={handleLoad}>Load Video</Button>
       </div>
+      <SavedVideosList onSelectVideo={setLoadedUrl} />
     </div>
   );
 }
