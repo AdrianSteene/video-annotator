@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { VideoData } from "@/types/bookmark";
 import { Play, FileVideo, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { fetchVideoMetadata } from "@/lib/utils";
 
 interface VideoMetadata {
   url: string;
@@ -48,28 +49,6 @@ export function SavedVideosList({ onSelectVideo }: SavedVideosListProps) {
     savedVideos.sort((a, b) => b.bookmarkCount - a.bookmarkCount);
     setVideos(savedVideos);
     setLoading(false);
-  }
-
-  async function fetchVideoMetadata(url: string): Promise<{
-    title: string;
-    thumbnail: string;
-  }> {
-    try {
-      const response = await fetch(
-        `https://noembed.com/embed?url=${encodeURIComponent(url)}`
-      );
-      const data = await response.json();
-      return {
-        title: data.title || url,
-        thumbnail: data.thumbnail_url || "",
-      };
-    } catch (error) {
-      console.error("Failed to fetch video metadata:", error);
-      return {
-        title: url,
-        thumbnail: "",
-      };
-    }
   }
 
   function deleteVideo(url: string, e: React.MouseEvent) {
