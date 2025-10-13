@@ -48,8 +48,12 @@ export function BookmarkItem({ bookmark }: BookmarkItemProps) {
             placeholder="Add a comment..."
             value={bookmark.comment}
             onChange={(e) => updateBookmarkComment(bookmark.id, e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                setEditingBookmark(null);
+              }
+            }}
             onBlur={() => setEditingBookmark(null)}
-            autoFocus
           />
         </div>
       ) : (

@@ -2,7 +2,10 @@ import { useEffect } from "react";
 
 export function useKeyboardShortcuts(
   enabled: boolean,
-  onAddBookmark: () => void
+  onAddBookmark: () => void,
+  onTogglePlayPause: () => void,
+  onSkipBackward: () => void,
+  onSkipForward: () => void
 ) {
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -12,13 +15,31 @@ export function useKeyboardShortcuts(
         target.tagName === "TEXTAREA" ||
         target.isContentEditable;
 
-      if (e.key === "n" && enabled && !isInputField) {
-        e.preventDefault();
-        onAddBookmark();
+      if (!enabled) return;
+
+      if (isInputField) return;
+
+      switch (e.key) {
+        case "n":
+          e.preventDefault();
+          onAddBookmark();
+          break;
+        case " ":
+          e.preventDefault();
+          onTogglePlayPause();
+          break;
+        case "ArrowLeft":
+          e.preventDefault();
+          onSkipBackward();
+          break;
+        case "ArrowRight":
+          e.preventDefault();
+          onSkipForward();
+          break;
       }
     };
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [enabled, onAddBookmark]);
+  }, [enabled, onAddBookmark, onTogglePlayPause, onSkipBackward, onSkipForward]);
 }

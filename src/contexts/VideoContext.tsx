@@ -19,11 +19,15 @@ interface VideoContextType {
   duration: number;
   bookmarks: BookmarkType[];
   editingBookmark: string | null;
+  playbackRate: number;
   setLoadedUrl: (url: string) => void;
   setIsPlaying: (playing: boolean) => void;
   setEditingBookmark: (id: string | null) => void;
+  setPlaybackRate: (rate: number) => void;
   togglePlayPause: () => void;
   seekTo: (time: number) => void;
+  skipBackward: () => void;
+  skipForward: () => void;
   addBookmark: () => void;
   updateBookmarkComment: (id: string, comment: string) => void;
   deleteBookmark: (id: string) => void;
@@ -43,8 +47,13 @@ export function VideoProvider({ children }: { children: ReactNode }) {
   const [duration, setDuration] = useState(0);
   const [bookmarks, setBookmarks] = useState<BookmarkType[]>([]);
   const [editingBookmark, setEditingBookmark] = useState<string | null>(null);
+  const [playbackRate, setPlaybackRate] = useState(1);
 
   useVideoStorage(loadedUrl || null, bookmarks, setBookmarks);
+
+  const togglePlayPause = useCallback(() => {
+    setIsPlaying((prev) => !prev);
+  }, []);
 
   const addBookmark = useCallback(() => {
     const newBookmark: BookmarkType = {
@@ -59,11 +68,29 @@ export function VideoProvider({ children }: { children: ReactNode }) {
     setEditingBookmark(newBookmark.id);
   }, [currentTime]);
 
-  useKeyboardShortcuts(!!loadedUrl, addBookmark);
-
-  const togglePlayPause = useCallback(() => {
-    setIsPlaying((prev) => !prev);
+  const skipBackward = useCallback(() => {
+    if (playerRef.current) {
+      const newTime = Math.max(0, playerRef.current.currentTime - 10);
+      playerRef.current.currentTime = newTime;
+      setCurrentTime(newTime);
+    }
   }, []);
+
+  const skipForward = useCallback(() => {
+    if (playerRef.current) {
+      const newTime = Math.min(duration, playerRef.current.currentTime + 10);
+      playerRef.current.currentTime = newTime;
+      setCurrentTime(newTime);
+    }
+  }, [duration]);
+
+  useKeyboardShortcuts(
+    !!loadedUrl,
+    addBookmark,
+    togglePlayPause,
+    skipBackward,
+    skipForward
+  );
 
   const seekTo = useCallback((time: number) => {
     if (playerRef.current) {
@@ -81,8 +108,9 @@ export function VideoProvider({ children }: { children: ReactNode }) {
   const handleLoadedMetadata = useCallback(() => {
     if (playerRef.current) {
       setDuration(playerRef.current.duration);
+      playerRef.current.playbackRate = playbackRate;
     }
-  }, []);
+  }, [playbackRate]);
 
   const updateBookmarkComment = useCallback((id: string, comment: string) => {
     setBookmarks((prev) =>
@@ -101,6 +129,7 @@ export function VideoProvider({ children }: { children: ReactNode }) {
     setCurrentTime(0);
     setDuration(0);
     setEditingBookmark(null);
+    setPlaybackRate(1);
   }, []);
 
   const value: VideoContextType = {
@@ -111,11 +140,15 @@ export function VideoProvider({ children }: { children: ReactNode }) {
     duration,
     bookmarks,
     editingBookmark,
+    playbackRate,
     setLoadedUrl,
     setIsPlaying,
     setEditingBookmark,
+    setPlaybackRate,
     togglePlayPause,
     seekTo,
+    skipBackward,
+    skipForward,
     addBookmark,
     updateBookmarkComment,
     deleteBookmark,

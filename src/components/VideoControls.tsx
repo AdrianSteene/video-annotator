@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Play, Pause, Bookmark } from "lucide-react";
 import { Timeline } from "@/components/Timeline";
+import { PlaybackSpeedControl } from "@/components/PlaybackSpeedControl";
 import { useVideo } from "@/contexts/VideoContext";
 
 export function VideoControls() {
@@ -25,6 +26,8 @@ export function VideoControls() {
         >
           <Bookmark className="w-4 h-4" />
         </Button>
+
+        <PlaybackSpeedControl />
 
         <Timeline />
       </div>
