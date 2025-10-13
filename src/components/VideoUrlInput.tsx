@@ -46,7 +46,8 @@ export function VideoUrlInput() {
     return () => clearTimeout(timeoutId);
   }, [videoUrl]);
 
-  const handleLoad = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     try {
       new URL(videoUrl);
     } catch {
@@ -64,18 +65,17 @@ export function VideoUrlInput() {
           Enter a Video, Vimeo, or other supported video URL to start annotating
         </p>
       </div>
-      <div className="flex gap-2">
+      <form onSubmit={handleSubmit} className="flex gap-2">
         <Input
           placeholder="https://www.youtube.com/watch?v=..."
           value={videoUrl}
           onChange={(e) => setVideoUrl(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleLoad()}
           className={`flex-1 ${
             error && "border-red-500 focus-visible:ring-red-500"
           }`}
         />
-        <Button onClick={handleLoad}>Load Video</Button>
-      </div>
+        <Button type="submit">Load Video</Button>
+      </form>
       {error && (
         <Alert variant="destructive">
           <AlertCircleIcon />
