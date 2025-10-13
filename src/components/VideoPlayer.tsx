@@ -20,7 +20,7 @@ export function VideoPlayer() {
         onClick={togglePlayPause}
       >
         <ReactPlayer
-          ref={playerRef}
+          ref={playerRef as React.RefObject<HTMLVideoElement>}
           src={loadedUrl}
           playing={isPlaying}
           playbackRate={playbackRate}
@@ -28,13 +28,6 @@ export function VideoPlayer() {
           style={{ width: "100%", height: "100%", pointerEvents: "none" }}
           onTimeUpdate={handleTimeUpdate}
           onLoadedMetadata={handleLoadedMetadata}
-          config={{
-            youtube: {
-              playerVars: {
-                disablekb: 1,
-              },
-            },
-          }}
         />
       </div>
 
