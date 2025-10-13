@@ -7,21 +7,32 @@ export function VideoPlayer() {
     playerRef,
     loadedUrl,
     isPlaying,
+    togglePlayPause,
     handleTimeUpdate,
     handleLoadedMetadata,
   } = useVideo();
 
   return (
     <div className="bg-card rounded-lg overflow-hidden border">
-      <div className="aspect-video bg-black relative">
+      <div
+        className="aspect-video bg-black relative cursor-pointer"
+        onClick={togglePlayPause}
+      >
         <ReactPlayer
           ref={playerRef}
           src={loadedUrl}
           playing={isPlaying}
           controls={false}
-          style={{ width: "100%", height: "100%" }}
+          style={{ width: "100%", height: "100%", pointerEvents: "none" }}
           onTimeUpdate={handleTimeUpdate}
           onLoadedMetadata={handleLoadedMetadata}
+          config={{
+            youtube: {
+              playerVars: {
+                disablekb: 1,
+              },
+            },
+          }}
         />
       </div>
 
