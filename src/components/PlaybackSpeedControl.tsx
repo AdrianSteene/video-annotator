@@ -11,13 +11,10 @@ import { Gauge } from "lucide-react";
 const PLAYBACK_SPEEDS = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
 
 export function PlaybackSpeedControl() {
-  const { playbackRate, setPlaybackRate, playerRef } = useVideo();
+  const { playbackRate, setPlaybackRate } = useVideo();
 
   const handleSpeedChange = (speed: number) => {
     setPlaybackRate(speed);
-    if (playerRef.current) {
-      playerRef.current.playbackRate = speed;
-    }
   };
 
   return (
@@ -41,4 +38,3 @@ export function PlaybackSpeedControl() {
     </DropdownMenu>
   );
 }
-

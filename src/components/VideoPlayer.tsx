@@ -7,6 +7,7 @@ export function VideoPlayer() {
     playerRef,
     loadedUrl,
     isPlaying,
+    playbackRate,
     togglePlayPause,
     handleTimeUpdate,
     handleLoadedMetadata,
@@ -22,6 +23,7 @@ export function VideoPlayer() {
           ref={playerRef}
           src={loadedUrl}
           playing={isPlaying}
+          playbackRate={playbackRate}
           controls={false}
           style={{ width: "100%", height: "100%", pointerEvents: "none" }}
           onTimeUpdate={handleTimeUpdate}

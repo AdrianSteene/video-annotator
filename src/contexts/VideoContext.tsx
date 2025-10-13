@@ -108,9 +108,8 @@ export function VideoProvider({ children }: { children: ReactNode }) {
   const handleLoadedMetadata = useCallback(() => {
     if (playerRef.current) {
       setDuration(playerRef.current.duration);
-      playerRef.current.playbackRate = playbackRate;
     }
-  }, [playbackRate]);
+  }, []);
 
   const updateBookmarkComment = useCallback((id: string, comment: string) => {
     setBookmarks((prev) =>
