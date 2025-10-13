@@ -1,22 +1,57 @@
 import { useVideo } from "@/contexts/VideoContext";
+import { useRef, useState, useEffect, useCallback } from "react";
 
 export function Timeline() {
   const { currentTime, duration, bookmarks, seekTo, formatTime } = useVideo();
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const percentage = x / rect.width;
-    const time = percentage * duration;
-    seekTo(time);
+  const handleSeek = useCallback(
+    (e: MouseEvent | React.MouseEvent<HTMLDivElement>) => {
+      if (!timelineRef.current) return;
+      const rect = timelineRef.current.getBoundingClientRect();
+      const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+      const percentage = x / rect.width;
+      const time = percentage * duration;
+      seekTo(time);
+    },
+    [duration, seekTo]
+  );
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    setIsDragging(true);
+    handleSeek(e);
   };
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isDragging) {
+        handleSeek(e);
+      }
+    };
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+    };
+
+    if (isDragging) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging, handleSeek]);
 
   return (
     <div className="flex-1 flex items-center gap-2">
       <span className="text-sm tabular-nums">{formatTime(currentTime)}</span>
       <div
-        className="flex-1 h-2 bg-secondary rounded-full cursor-pointer relative group"
-        onClick={handleClick}
+        ref={timelineRef}
+        className="flex-1 h-2 bg-secondary rounded-full cursor-pointer relative group select-none"
+        onMouseDown={handleMouseDown}
       >
         <div
           className="h-full bg-primary rounded-full transition-all"
