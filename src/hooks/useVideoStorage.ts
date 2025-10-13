@@ -14,7 +14,7 @@ export function useVideoStorage(
         setBookmarks(data.bookmarks);
       }
     }
-  }, [url]);
+  }, [url, setBookmarks]);
 
   useEffect(() => {
     if (url && bookmarks.length >= 0) {

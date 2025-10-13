@@ -162,6 +162,7 @@ export function VideoProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useVideo() {
   const context = useContext(VideoContext);
   if (context === undefined) {
