@@ -20,9 +20,11 @@ export function BookmarkList() {
             No bookmarks yet. Add one to get started!
           </p>
         ) : (
-          bookmarks.map((bookmark) => (
-            <BookmarkItem key={bookmark.id} bookmark={bookmark} />
-          ))
+          bookmarks
+            .sort((a, b) => b.createdAt - a.createdAt)
+            .map((bookmark) => (
+              <BookmarkItem key={bookmark.id} bookmark={bookmark} />
+            ))
         )}
       </div>
     </div>
