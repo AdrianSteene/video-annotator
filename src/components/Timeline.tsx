@@ -5,6 +5,9 @@ export function Timeline() {
   const { currentTime, duration, bookmarks, seekTo, formatTime } = useVideo();
   const timelineRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [previewTime, setPreviewTime] = useState<number | null>(null);
+
+  const displayTime = previewTime ?? currentTime;
 
   const handleSeek = useCallback(
     (e: MouseEvent | React.MouseEvent<HTMLDivElement>) => {
@@ -13,6 +16,7 @@ export function Timeline() {
       const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
       const percentage = x / rect.width;
       const time = percentage * duration;
+      setPreviewTime(time);
       seekTo(time);
     },
     [duration, seekTo]
@@ -32,6 +36,7 @@ export function Timeline() {
 
     const handleMouseUp = () => {
       setIsDragging(false);
+      setPreviewTime(null);
     };
 
     if (isDragging) {
@@ -43,20 +48,20 @@ export function Timeline() {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isDragging, handleSeek]);
+  }, [isDragging, duration, seekTo, handleSeek]);
 
   return (
     <div className="flex-1 flex items-center gap-2">
-      <span className="text-sm tabular-nums">{formatTime(currentTime)}</span>
+      <span className="text-sm tabular-nums">{formatTime(displayTime)}</span>
       <div
         ref={timelineRef}
         className="flex-1 h-2 bg-secondary rounded-full cursor-pointer relative group select-none"
         onMouseDown={handleMouseDown}
       >
         <div
-          className="h-full bg-primary rounded-full transition-all"
+          className="h-full bg-primary rounded-full"
           style={{
-            width: `${duration ? (currentTime / duration) * 100 : 0}%`,
+            width: `${duration ? (displayTime / duration) * 100 : 0}%`,
           }}
         />
         {bookmarks.map((bookmark) => (
