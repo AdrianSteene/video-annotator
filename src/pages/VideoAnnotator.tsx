@@ -1,13 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { VideoProvider, useVideo } from "@/contexts/VideoContext";
 import { VideoUrlInput } from "@/components/VideoUrlInput";
 import { VideoPlayer } from "@/components/VideoPlayer";
 import { BookmarkList } from "@/components/BookmarkList";
 
 function VideoAnnotatorContent() {
-  const navigate = useNavigate();
   const { loadedUrl, resetVideo } = useVideo();
 
   return (
