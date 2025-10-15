@@ -14,7 +14,11 @@ function VideoAnnotatorContent() {
     <div className="min-h-screen bg-background">
       <div className="border-b">
         <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate("/annotate")}
+          >
             <ArrowLeft className="w-4 h-4" />
           </Button>
           <h1 className="text-xl font-bold">Video Annotator</h1>
